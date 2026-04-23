@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Register | Flosendo Feedback Copilot</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <div class="card">
+    <div class="card-header">Create an account</div>
+    <p class="text-muted text-small mt-12">Register to access the Flosendo Feedback Copilot.</p>
+
+    <form id="registerForm">
+      <label>Full name</label><br />
+      <input type="text" id="fullName" placeholder="e.g. Jane Smith" required /><br /><br />
+
+      <label>Email</label><br />
+      <input type="email" id="email" required /><br /><br />
+
+      <label>Password</label><br />
+      <input type="password" id="password" placeholder="At least 12 characters, include a special character" required /><br /><br />
+
+      <label>I am a</label><br />
+      <select id="role">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="school_admin">School Admin</option>
+      </select><br /><br />
+
+      <label>School</label><br />
+      <input type="text" id="school" placeholder="e.g. Greenwood Academy" required /><br /><br />
+
+      <div id="classRow">
+        <label>Class</label><br />
+        <input type="text" id="className" placeholder="e.g. 10B or Year 10" /><br /><br />
+      </div>
+
+      <div id="proofRow" style="display:none;">
+        <label>Verification information</label><br />
+        <p class="text-muted text-small">Explain why you should be granted school admin access — your role, department, school contact details, or any other relevant information. Your request will be reviewed by the Flosendo platform team.</p>
+        <textarea id="adminProof" rows="4" style="width:100%;" placeholder="e.g. I am the Head of IT at Greenwood Academy. Contact: admin@greenwood.ac.uk, +44 ..."></textarea><br /><br />
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p id="message" class="mt-8"></p>
+
+    <p style="margin-top: 12px;">
+      Already have an account? <a href="/login">Sign in</a>
+    </p>
+    <p>
+      <a class="btn" href="/">Back to home</a>
+    </p>
+  </div>
+
+  <script>
+    const roleSelect = document.getElementById("role");
+    const classRow = document.getElementById("classRow");
+
+    const proofRow = document.getElementById("proofRow");
+
+    function updateRoleFields() {
+      classRow.style.display = roleSelect.value === "student" ? "" : "none";
+      proofRow.style.display = roleSelect.value === "school_admin" ? "" : "none";
+    }
+
+    roleSelect.addEventListener("change", updateRoleFields);
+    updateRoleFields();
+
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("message");
+      msg.textContent = "Creating account...";
+
+      const body = {
+        full_name: document.getElementById("fullName").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value,
+        role: roleSelect.value,
+        school: document.getElementById("school").value.trim(),
+        class_name: document.getElementById("className").value.trim(),
+        admin_proof: document.getElementById("adminProof").value.trim(),
+      };
+
+      const res = await fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        msg.textContent = data.detail || "Registration failed. Please try again.";
+        return;
+      }
+
+      msg.textContent = "Account created! Check your email to verify your account before logging in.";
+      document.getElementById("registerForm").style.display = "none";
+    });
+  </script>
+</body>
+</html>

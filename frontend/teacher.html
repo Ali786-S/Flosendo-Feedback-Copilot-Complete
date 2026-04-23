@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Teacher Dashboard</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body data-requires-auth="true">
+
+  <div class="top-bar">
+    <a href="/" class="logo-link" aria-label="Home">
+      <img src="/static/img/logo.png" alt="Flosendo" class="logo" />
+    </a>
+
+    <div class="top-bar-right">
+      <a class="btn" href="/my-details">My Details</a>
+      <a class="btn" href="/auth/change-password">Change password</a>
+      <button id="logoutBtn" type="button" class="btn">Logout</button>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-header">Teacher Dashboard</div>
+    <p id="who" class="text-muted"></p>
+    <p class="text-muted">Teacher view – review student submissions and feedback summaries.</p>
+
+    <div class="layout">
+
+      <!-- LEFT: list -->
+      <div class="left-panel">
+        <div class="card-header">All submissions</div>
+        <div id="allSubmissions"></div>
+      </div>
+
+      <!-- MIDDLE: viewer -->
+      <div class="mid-panel">
+        <div class="card">
+          <div class="card-header">Submission viewer</div>
+
+          <!-- Teacher tools -->
+          <div class="card mt-12" id="teacherTools">
+            <p class="text-muted text-small">
+              Teacher tools (prototype): add a note and flag items for follow-up.
+            </p>
+
+            <label class="text-small">
+              <input type="checkbox" id="flagCheckbox" />
+              Flag for follow-up
+            </label>
+
+            <div class="mt-12"></div>
+
+            <label class="text-small">Teacher note</label><br />
+            <textarea id="teacherNote" rows="4" style="width:100%;" placeholder="Write a quick note..."></textarea>
+
+            <div class="mt-12"></div>
+
+            <button id="saveReviewBtn" type="button">Save note/flag</button>
+            <p id="reviewMsg" class="text-muted text-small mt-8"></p>
+          </div>
+
+          <!-- Viewer -->
+          <div id="submissionPanel" class="card mt-12 text-muted">
+            Select a submission to view the student work and feedback.
+          </div>
+
+          <hr class="mt-20" />
+        </div>
+      </div>
+
+      <!-- RIGHT: Teacher Copilot Chat -->
+      <div class="right-mini">
+        <div class="card mt-12">
+          <div class="card-header">Teacher Copilot</div>
+          <p class="text-muted text-small">
+            Use this for lesson planning, activities, differentiation, and general teaching support.
+          </p>
+
+          <div id="teacherChatLog" class="chat-log"></div>
+          <label class="text-small">Attach files (lesson plans, slides, docs)</label><br />
+          <input id="teacherChatFiles" type="file" multiple />
+          <p id="teacherChatFilesMsg" class="text-muted text-small mt-8"></p>
+
+          <input id="teacherChatInput" type="text" style="width:100%;"
+                 placeholder="e.g., Create a 45-minute lesson plan on persuasive writing for KS3" />
+          <div class="mt-8"></div>
+          <button id="teacherChatSendBtn" type="button">Send</button>
+          <p id="teacherChatMsg" class="text-muted text-small mt-8"></p>
+        </div>
+
+        <div class="mt-20"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+  <script src="/static/js/teacher_view.js"></script>
+  <script src="/static/js/teacher_chat.js"></script>
+
+</body>
+</html>

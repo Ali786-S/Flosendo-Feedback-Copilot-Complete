@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>My Details | Flosendo</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body data-requires-auth="true">
+
+  <div class="top-bar">
+    <a href="/" class="logo-link" aria-label="Home">
+      <img src="/static/img/logo.png" alt="Flosendo" class="logo" />
+    </a>
+    <div class="top-bar-right">
+      <a class="btn" id="backBtn" href="/">Back</a>
+      <button id="logoutBtn" type="button" class="btn">Logout</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="card" style="max-width: 520px; margin: 0 auto;">
+      <div class="card-header">My Details</div>
+      <p class="text-muted text-small">Update your name, school and class.</p>
+
+      <label class="text-small">Full name</label>
+      <input id="fullName" type="text" placeholder="e.g. Jane Smith" />
+
+      <div class="mt-12"></div>
+
+      <label class="text-small">School</label>
+      <input id="school" type="text" placeholder="e.g. Greenwood Academy" />
+
+      <div class="mt-12" id="classRow"></div>
+      <div id="classWrapper" style="display:none;">
+        <label class="text-small">Class</label>
+        <input id="className" type="text" placeholder="e.g. 10B or Year 10" />
+        <div class="mt-12"></div>
+      </div>
+
+      <button id="saveBtn" type="button" class="btn-primary" style="width:100%;">Save changes</button>
+      <p id="msg" class="text-muted text-small mt-8"></p>
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+  <script>
+    async function init() {
+      const res = await fetch("/auth/me");
+      if (!res.ok) { window.location.href = "/login"; return; }
+      const me = await res.json();
+
+      document.getElementById("fullName").value = me.full_name || "";
+      document.getElementById("school").value = me.school || "";
+      document.getElementById("className").value = me.class_name || "";
+
+      if (me.role === "student") document.getElementById("classWrapper").style.display = "";
+
+      const backBtn = document.getElementById("backBtn");
+      if (me.role === "teacher") backBtn.href = "/teacher";
+      else if (me.role === "admin") backBtn.href = "/admin";
+      else backBtn.href = "/student";
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", async () => {
+      const msg = document.getElementById("msg");
+      msg.textContent = "Saving...";
+
+      const res = await fetch("/api/me/details", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: document.getElementById("fullName").value.trim(),
+          school: document.getElementById("school").value.trim(),
+          class_name: document.getElementById("className").value.trim(),
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        msg.textContent = data.detail || "Failed to save.";
+        return;
+      }
+      msg.textContent = "Details saved successfully.";
+    });
+
+    init();
+  </script>
+</body>
+</html>

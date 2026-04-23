@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin | Manage Users</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body data-requires-auth="true">
+  <div class="card">
+    <div class="card-header">Admin: Create User</div>
+
+    <p id="who"></p>
+
+    <form id="createUserForm">
+      <label>Email</label><br />
+      <input type="email" id="newEmail" required /><br /><br />
+
+      <label>Role</label><br />
+      <select id="newRole">
+        <option value="student">student</option>
+        <option value="teacher">teacher</option>
+        <option value="admin">admin</option>
+      </select><br /><br />
+
+      <label>Temporary Password</label><br />
+      <input type="password" id="newPassword" required /><br /><br />
+
+      <button type="submit">Create user</button>
+    </form>
+
+    <p id="message"></p>
+
+    <hr />
+
+    <div id="pendingSection" style="display:none;">
+      <hr />
+      <div class="card-header">Pending School Admin Requests</div>
+      <p class="text-muted text-small">Review and approve or reject school admin applications.</p>
+      <ul id="pendingList"></ul>
+    </div>
+
+    <hr />
+    <div class="card-header">Existing Users</div>
+    <ul id="userList"></ul>
+
+    <p style="margin-top: 12px;">
+      <a href="/admin">Back to Admin Dashboard</a>
+    </p>
+
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+  <script src="/static/js/admin_users.js"></script>
+</body>
+</html>

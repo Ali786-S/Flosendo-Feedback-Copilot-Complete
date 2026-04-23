@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin | Rubrics & Analytics</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+
+<body data-requires-auth="true">
+  <div class="top-bar">
+    <a class="btn" href="/admin">Back to Admin</a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Admin: Analytics</div>
+    <ul id="analytics"></ul>
+
+    <hr />
+
+    <div class="card-header">Admin: Rubrics</div>
+
+    <div class="mt-12"></div>
+    <div class="card-header">Create a new rubric</div>
+
+    <label>Rubric title</label><br />
+    <input type="text" id="rubricTitle" style="width:100%;" /><br /><br />
+
+    <label>Criteria (one per line: Name | Description)</label><br />
+    <textarea id="rubricCriteria" rows="6" style="width:100%;"
+      placeholder="Clarity | Is the writing clear and easy to follow?
+Evidence | Are examples used to support claims?"></textarea><br /><br />
+
+    <button id="createRubricBtn" type="button">Create rubric</button>
+    <p id="msg" class="text-muted mt-8"></p>
+
+    <hr />
+
+    <div class="card-header">Existing rubrics</div>
+    <ul id="rubricList"></ul>
+
+    <div id="editSection" style="display:none; margin-top:16px;">
+      <hr />
+      <div class="card-header">Edit rubric</div>
+      <input type="hidden" id="editRubricId" />
+      <label>Rubric title</label><br />
+      <input type="text" id="editTitle" style="width:100%;" /><br /><br />
+      <label>Criteria (one per line: Name | Description)</label><br />
+      <textarea id="editCriteria" rows="6" style="width:100%;"></textarea><br /><br />
+      <button id="saveEditBtn" type="button">Save changes</button>
+      <button id="cancelEditBtn" type="button" style="margin-left:8px;">Cancel</button>
+      <p id="editMsg" class="text-muted mt-8"></p>
+    </div>
+
+    <div class="mt-20"></div>
+    <button id="logoutBtn" type="button">Logout</button>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+  <script src="/static/js/admin_rubrics.js"></script>
+</body>
+</html>

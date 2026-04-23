@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Email Verification | Flosendo</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <div class="card" style="max-width: 480px; margin: 60px auto;">
+    <div id="msgOk" style="display:none;">
+      <div class="card-header">Email Verified</div>
+      <p>Your email has been verified. You can now <a href="/login">log in</a>.</p>
+    </div>
+    <div id="msgErr" style="display:none;">
+      <div class="card-header">Verification Failed</div>
+      <p>This link is invalid or has already been used.</p>
+      <label>Enter your email to get a new link</label><br />
+      <input type="email" id="resendEmail" placeholder="your@email.com" style="width:100%;" /><br /><br />
+      <button id="resendBtn" type="button">Resend verification email</button>
+      <span id="resendCountdown" class="text-muted text-small" style="margin-left: 10px;"></span>
+      <p id="resendMsg" class="text-muted text-small mt-8"></p>
+    </div>
+  </div>
+  <script>
+    const status = "__STATUS__";
+    if (status === "ok") document.getElementById("msgOk").style.display = "";
+    else document.getElementById("msgErr").style.display = "";
+
+    const resendBtn = document.getElementById("resendBtn");
+    const resendCountdown = document.getElementById("resendCountdown");
+    const resendMsg = document.getElementById("resendMsg");
+
+    function startCooldown() {
+      let seconds = 30;
+      resendBtn.disabled = true;
+      resendCountdown.textContent = `Try again in ${seconds}s`;
+      const interval = setInterval(() => {
+        seconds--;
+        resendCountdown.textContent = seconds > 0 ? `Try again in ${seconds}s` : "";
+        if (seconds <= 0) { clearInterval(interval); resendBtn.disabled = false; }
+      }, 1000);
+    }
+
+    resendBtn?.addEventListener("click", async () => {
+      const email = document.getElementById("resendEmail").value.trim();
+      if (!email) { resendMsg.textContent = "Please enter your email."; return; }
+      resendMsg.textContent = "Sending...";
+      startCooldown();
+      const res = await fetch("/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+      resendMsg.textContent = res.ok
+        ? "Verification email sent. Check your inbox."
+        : "Something went wrong. Please try again.";
+    });
+  </script>
+</body>
+</html>

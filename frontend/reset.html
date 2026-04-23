@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Reset Password</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <div class="top-bar">
+    <a href="/" class="logo-link" aria-label="Home">
+      <img src="/static/img/logo.png" alt="Flosendo" class="logo" />
+    </a>
+    <div class="top-bar-right">
+      <a class="btn" href="/login">Back to login</a>
+    </div>
+  </div>
+
+  <div class="card" style="max-width:520px; margin: 24px auto;">
+    <div class="card-header">Reset your password</div>
+
+    <label>New password</label>
+    <input id="newPw" type="password" placeholder="At least 8 characters" />
+    <div class="mt-12"></div>
+
+    <label>Confirm password</label>
+    <input id="newPw2" type="password" placeholder="Re-type password" />
+    <div class="mt-12"></div>
+
+    <button id="resetBtn" class="btn-primary" type="button">Reset Password</button>
+    <p id="resetMsg" class="text-muted mt-8"></p>
+  </div>
+
+  <script>
+    function getToken() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("token") || "";
+    }
+
+    document.getElementById("resetBtn").addEventListener("click", async () => {
+      const token = getToken();
+      const pw1 = document.getElementById("newPw").value || "";
+      const pw2 = document.getElementById("newPw2").value || "";
+      const msg = document.getElementById("resetMsg");
+      msg.textContent = "";
+
+      if (!token) { msg.textContent = "Missing token."; return; }
+      if (pw1.length < 8) { msg.textContent = "Password must be at least 8 characters."; return; }
+      if (pw1 !== pw2) { msg.textContent = "Passwords do not match."; return; }
+
+      const res = await fetch("/auth/reset", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ token, new_password: pw1 })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { msg.textContent = data.detail || "Reset failed."; return; }
+
+      msg.textContent = "Password reset ✅ Redirecting to login...";
+      setTimeout(() => window.location.href = "/login", 900);
+    });
+  </script>
+</body>
+</html>

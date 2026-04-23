@@ -1,0 +1,27 @@
+# Environment variables - contains API keys and passwords
+.env
+
+# Database and user data
+data/
+*.db
+
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# User uploaded files
+uploads/
+
+# macOS system files
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/

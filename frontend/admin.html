@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body data-requires-auth="true">
+
+  <div class="card">
+    <div class="card-header">Admin Dashboard</div>
+    <p id="who" class="text-muted"></p>
+
+    <p>Welcome! This is where you’ll manage rubrics, users, and analytics.</p>
+
+    <hr />
+
+    <p id="dashboardDesc">
+      This admin dashboard provides oversight and configuration tools
+      for the Feedback Copilot system.
+    </p>
+
+    <p class="text-muted">
+      Admin view – manage users, rubrics, and system configuration.
+    </p>
+
+    <div class="mt-12">
+      <a class="btn" href="/admin/users">Manage Users</a>
+      <p class="text-muted text-small mt-8">
+        Create and manage student, teacher, and admin accounts.
+      </p>
+    </div>
+
+    <div class="mt-12">
+      <a class="btn" href="/admin/rubrics">Rubrics & Analytics</a>
+      <p class="text-muted text-small mt-8">
+        Create/manage rubric templates and view usage stats.
+      </p>
+    </div>
+
+    <div class="mt-20"></div>
+    <button id="logoutBtn" type="button">Logout</button>
+    <a class="btn" href="/auth/change-password">Change password</a>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+  <script>
+    loadMe().then(data => {
+      if (data && data.role === "school_admin" && data.school) {
+        document.getElementById("dashboardDesc").textContent =
+          `This admin dashboard provides oversight and configuration tools for the Feedback Copilot system for ${data.school} school.`;
+      }
+    });
+  </script>
+</body>
+</html>

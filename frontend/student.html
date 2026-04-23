@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+
+</head>
+
+<body data-requires-auth="true">
+<div class="top-bar">
+  <a href="/" class="logo-link" aria-label="Home">
+    <img src="/static/img/logo.png" alt="Flosendo" class="logo" />
+  </a>
+
+  <div class="top-bar-right">
+    <a class="btn" href="/my-details">My Details</a>
+    <a class="btn" href="/auth/change-password">Change password</a>
+    <button id="logoutBtn" type="button" class="btn">Logout</button>
+  </div>
+</div>
+
+
+
+
+  <div class="card">
+    <div class="card-header">Student Dashboard</div>
+    <p id="who" class="text-muted"></p>
+    <p class="text-muted">Student view – submit work and receive formative rubric-aligned feedback.</p>
+  </div>
+
+  <div class="layout">
+
+    <!-- LEFT -->
+    <div class="left-panel card">
+      <div class="card-header">Submit your work</div>
+      <label>Attach files (optional)</label>
+      <input id="submissionFiles" type="file" multiple />
+      <p id="submissionFilesMsg" style="font-size: 0.9em; color: #555;"></p>
+
+
+      <label>Choose rubric</label><br />
+      <select id="rubricSelect"></select>
+
+      <div class="mt-12"></div>
+
+      <label>Your submission (text)</label><br />
+      <textarea id="submissionText" rows="8" style="width: 100%;" placeholder="Paste your work here..."></textarea>
+
+      <div class="mt-12"></div>
+
+      <button id="submitBtn" type="button">Submit for feedback</button>
+      <p id="message" class="text-muted mt-8"></p>
+
+      <hr />
+
+      <div class="card-header submissions-toggle" id="mySubmissionsToggle">
+      ▶ My submissions <span id="submissionCount" class="text-muted"></span>
+      </div>
+
+      <ul id="mySubmissions" class="submissions-list hidden"></ul>
+
+
+      <div class="mt-20"></div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="mid-panel">
+
+      <div class="card">
+        <div class="card-header">Feedback viewer</div>
+        <div id="feedbackPanel" class="text-muted">
+          Select a submission to view feedback.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Feedback Chat (about selected submission)</div>
+        <p class="text-muted text-small">
+          Ask questions about your feedback and how to improve. Choose a submission first.
+        </p>
+
+        <div id="feedbackChatLog" class="chat-log"></div>
+        <label class="text-small">Attach files (PDF / DOCX / PPTX/ JPG / JPEG / PNG)</label><br />
+        <input id="feedbackChatFiles" type="file" multiple />
+        <p id="feedbackChatFilesMsg" class="text-muted text-small mt-8"></p>
+
+
+        <input id="feedbackChatInput" type="text" style="width:100%;" placeholder="e.g., How can I improve clarity?" />
+        <div class="mt-8"></div>
+        <button id="feedbackChatSendBtn" type="button">Send</button>
+        <p id="feedbackChatMsg" class="text-muted text-small mt-8"></p>
+      </div>
+      </div>
+
+   <div class="right-mini">
+      <div class="card">
+        <div class="card-header">General Help Chat (school-safe)</div>
+        <p class="text-muted text-small">
+          Ask general learning questions. Don’t include personal information.
+        </p>
+
+        <div id="generalChatLog" class="chat-log"></div>
+
+        <label class="text-small">Attach files (PDF / JPG / JPEG / PNG)</label><br />
+        <input id="generalChatFiles" type="file" multiple />
+        <p id="generalChatFilesMsg" class="text-muted text-small mt-8"></p>
+
+        <input id="generalChatInput" type="text" style="width:100%;" placeholder="e.g., What is a business model?" />
+        <div class="mt-8"></div>
+        <button id="generalChatSendBtn" type="button">Send</button>
+        <p id="generalChatMsg" class="text-muted text-small mt-8"></p>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+  <script src="/static/js/student_submit.js"></script>
+  <script src="/static/js/student_chat.js"></script>
+
+</body>
+</html>
