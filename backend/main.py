@@ -6,7 +6,7 @@ from pathlib import Path
 import json
 from datetime import datetime
 from fastapi import UploadFile, File
-import os, re, secrets
+import os, re, secrets, sqlite3
 import hashlib
 import smtplib
 from email.mime.text import MIMEText
@@ -141,7 +141,7 @@ async def register(request: Request):
         raise HTTPException(status_code=400, detail="Please enter your full name")
     if not email or "@" not in email:
         raise HTTPException(status_code=400, detail="Valid email is required")
-    if len(password) < 12 or not re.search(r'[^A-Za-z0-9]', password):
+    if len(password) < 12 or not re.search(r'[!@£$%^&*()\-_=+#~;:\'"<>?,./\\|\[\]{}]', password):
         raise HTTPException(status_code=400, detail="Password must be at least 12 characters and include at least one special character")
     if role not in {"student", "teacher", "school_admin"}:
         raise HTTPException(status_code=400, detail="Invalid role")
@@ -167,8 +167,11 @@ async def register(request: Request):
         )
         conn.commit()
         conn.close()
-    except Exception:
+    except sqlite3.IntegrityError:
         raise HTTPException(status_code=400, detail="An account with this email already exists")
+    except Exception as e:
+        print(f"[register] DB error: {e}")
+        raise HTTPException(status_code=500, detail="Registration failed due to a server error. Please try again.")
 
     try:
         base_url = os.getenv("BASE_URL", "http://127.0.0.1:8000").rstrip("/")
@@ -204,7 +207,7 @@ async def change_password(request: Request):
     current_password = body.get("current_password") or ""
     new_password = body.get("new_password") or ""
 
-    if len(new_password) < 12 or not re.search(r'[^A-Za-z0-9]', new_password):
+    if len(new_password) < 12 or not re.search(r'[!@£$%^&*()\-_=+#~;:\'"<>?,./\\|\[\]{}]', new_password):
         raise HTTPException(status_code=400, detail="Password must be at least 12 characters and include at least one special character")
 
     email = request.session.get("user_email")
@@ -338,7 +341,7 @@ async def reset_password(request: Request):
 
     if not token:
         raise HTTPException(status_code=400, detail="Missing token")
-    if len(new_password) < 12 or not re.search(r'[^A-Za-z0-9]', new_password):
+    if len(new_password) < 12 or not re.search(r'[!@£$%^&*()\-_=+#~;:\'"<>?,./\\|\[\]{}]', new_password):
         raise HTTPException(status_code=400, detail="Password must be at least 12 characters and include at least one special character")
 
     token_hash = sha256_hex(token)
@@ -551,7 +554,7 @@ async def create_user(request: Request):
 
     if not email or "@" not in email:
         raise HTTPException(status_code=400, detail="Valid email is required")
-    if len(password) < 12 or not re.search(r'[^A-Za-z0-9]', password):
+    if len(password) < 12 or not re.search(r'[!@£$%^&*()\-_=+#~;:\'"<>?,./\\|\[\]{}]', password):
         raise HTTPException(status_code=400, detail="Password must be at least 12 characters and include at least one special character")
 
     # School admins can only create student/teacher, and only for their own school
