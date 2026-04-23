@@ -1,9 +1,6 @@
 # Environment variables - contains API keys and passwords
 .env
 
-# Database and user data
-data/
-*.db
 
 # Python virtual environment
 .venv/
